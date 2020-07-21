@@ -68,6 +68,7 @@ func DeletaItem(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var err error
 	result := database.Connection("SELECT 1")
+	fmt.Println(result)
 	if err != nil {
 		fmt.Println("error")
 	}
