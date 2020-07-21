@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -15,8 +16,9 @@ const (
 	dbname   = "tcd_amazon"
 )
 
-func Connection(query string) *sql.Rows {
+func Connection(query string) string {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	var QueryResultShow string
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
@@ -32,7 +34,18 @@ func Connection(query string) *sql.Rows {
 
 	queryResult, err := db.Query(query)
 
+	for queryResult.Next() {
+		var name string
+		if err := queryResult.Scan(&name); err != nil {
+			log.Fatal(err)
+		}
+		QueryResultShow = fmt.Sprintf("%s\n", name)
+	}
+	if err := queryResult.Err(); err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println("Successfully connected!")
 
-	return queryResult
+	return QueryResultShow
 }
