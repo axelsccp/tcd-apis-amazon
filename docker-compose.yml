@@ -39,3 +39,10 @@ services:
       - POSTGRES_PASSWORD=admin
       - MAX_CONNECTIONS=300
 
+  flyway:
+    image: flyway/flyway
+    command:  -url=jdbc:postgresql://db/tcd_amazon -user=admin -password=admin info migrate info
+    volumes:
+      - ./scripts:/flyway/sql
+    depends_on:
+      - postgres
