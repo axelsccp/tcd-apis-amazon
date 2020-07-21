@@ -15,7 +15,7 @@ const (
 	dbname   = "tcd_amazon"
 )
 
-func Connection() *sql.DB {
+func Connection(query string) *sql.Rows {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
@@ -26,11 +26,13 @@ func Connection() *sql.DB {
 
 	err = db.Ping()
 
-	fmt.Println("Successfully connected!")
-
 	if err != nil {
 		panic(err)
 	}
 
-	return db
+	queryResult, err := db.Query(query)
+
+	fmt.Println("Successfully connected!")
+
+	return queryResult
 }

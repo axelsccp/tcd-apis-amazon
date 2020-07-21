@@ -2,8 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/axelsccp/tcd-apis-amazon/src/database"
 
 	"github.com/gorilla/mux"
 )
@@ -63,6 +66,11 @@ func DeletaItem(w http.ResponseWriter, r *http.Request) {
 
 // função principal para executar a api
 func main() {
+	var err error
+	result := database.Connection("SELECT 1")
+	if err != nil {
+		fmt.Println("error")
+	}
 	router := mux.NewRouter()
 	produto = append(produto, Item{ID: "1", Nome: "John", Marca: "Doe", Valor: "15,00"})
 	produto = append(produto, Item{ID: "2", Nome: "Koko", Marca: "Doe", Valor: "20,00"})
